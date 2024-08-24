@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const team1Score = document.querySelector('.team1 .current-score');
-    const team2Score = document.querySelector('.team2 .current-score');
+    const team1Score = document.querySelector('.team1-score .current-score');
+    const team2Score = document.querySelector('.team2-score .current-score');
     const addPointButtons = document.querySelectorAll('.add-point');
     const undoButton = document.getElementById('undo');
     const resetButton = document.getElementById('reset');
@@ -56,8 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
         team2Score.textContent = scores[currentScores[1]];
 
         for (let i = 0; i < 3; i++) {
-            document.querySelector(`.team1 .set${i + 1}`).textContent = sets[i][0];
-            document.querySelector(`.team2 .set${i + 1}`).textContent = sets[i][1];
+            document.querySelector(`.team1-score .set${i + 1}`).textContent = sets[i][0];
+            document.querySelector(`.team2-score .set${i + 1}`).textContent = sets[i][1];
         }
 
         // Highlight cells if score is 40-40
