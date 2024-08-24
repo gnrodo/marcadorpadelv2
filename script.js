@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const resetButton = document.getElementById('reset');
     const flagIcons = document.querySelectorAll('.flag-icon');
     const playerNames = document.querySelectorAll('.player-name');
+    const toggleModeButton = document.getElementById('toggleMode');
 
     const scores = ['0', '15', '30', '40', 'AD'];
     let currentScores = [0, 0];
@@ -88,6 +89,12 @@ document.addEventListener('DOMContentLoaded', () => {
         updateScoreboard();
     }
 
+    function toggleMode() {
+        document.body.classList.toggle('dark-mode');
+        const isDarkMode = document.body.classList.contains('dark-mode');
+        toggleModeButton.textContent = isDarkMode ? 'Modo Claro' : 'Modo Oscuro';
+    }
+
     addPointButtons.forEach((button) => {
         button.addEventListener('click', () => {
             const team = parseInt(button.getAttribute('data-team')) - 1;
@@ -97,6 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     undoButton.addEventListener('click', undo);
     resetButton.addEventListener('click', resetGame);
+    toggleModeButton.addEventListener('click', toggleMode);
 
     flagIcons.forEach(flag => {
         flag.addEventListener('click', () => {
