@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSet = 0;
     let history = [];
 
-    const fonts = ['Arial', 'Helvetica', 'Verdana', 'Times New Roman', 'Courier'];
+    const fonts = ['Roboto', 'Open Sans', 'Lato', 'Montserrat'];
     let currentFontIndex = 0;
     let currentFontSize = 16;
 
