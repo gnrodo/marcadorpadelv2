@@ -1,55 +1,75 @@
 document.addEventListener('DOMContentLoaded', () => {
-    const team1Score = document.querySelector('.team1 .score');
-    const team2Score = document.querySelector('.team2 .score');
-    const team1Sets = document.querySelector('.team1-sets');
-    const team2Sets = document.querySelector('.team2-sets');
+    const team1Score = document.querySelector('.team1 .current-score');
+    const team2Score = document.querySelector('.team2 .current-score');
     const addPointButtons = document.querySelectorAll('.add-point');
     const resetButton = document.getElementById('reset');
 
-    let scores = [0, 0];
-    let sets = [0, 0];
+    const scores = ['0', '15', '30', '40', 'AD'];
+    let currentScores = [0, 0];
+    let sets = [[0, 0], [0, 0], [0, 0]];
+    let currentSet = 0;
 
     function updateScore(team) {
-        scores[team]++;
-        if (team === 0) {
-            team1Score.textContent = scores[0];
+        const otherTeam = team === 0 ? 1 : 0;
+        
+        if (currentScores[team] === 3 && currentScores[otherTeam] === 3) {
+            // Punto de oro
+            winGame(team);
+        } else if (currentScores[team] === 3 && currentScores[otherTeam] < 3) {
+            winGame(team);
+        } else if (currentScores[team] === 4) {
+            winGame(team);
         } else {
-            team2Score.textContent = scores[1];
+            currentScores[team]++;
         }
 
-        checkForSetWin();
+        updateScoreboard();
     }
 
-    function checkForSetWin() {
-        if ((scores[0] >= 6 && scores[0] - scores[1] >= 2) || scores[0] === 7) {
-            sets[0]++;
-            team1Sets.textContent = sets[0];
-            resetScores();
-        } else if ((scores[1] >= 6 && scores[1] - scores[0] >= 2) || scores[1] === 7) {
-            sets[1]++;
-            team2Sets.textContent = sets[1];
-            resetScores();
+    function winGame(team) {
+        sets[currentSet][team]++;
+        if (sets[currentSet][team] >= 6 && sets[currentSet][team] - sets[currentSet][1 - team] >= 2) {
+            winSet(team);
+        } else if (sets[currentSet][team] === 7) {
+            winSet(team);
+        }
+        currentScores = [0, 0];
+        updateScoreboard();
+    }
+
+    function winSet(team) {
+        currentSet++;
+        if (currentSet === 3 || (currentSet === 2 && sets[0][team] === 1)) {
+            // Game over, team wins
+            alert(`¡El Equipo ${team + 1} gana el partido!`);
         }
     }
 
-    function resetScores() {
-        scores = [0, 0];
-        team1Score.textContent = '0';
-        team2Score.textContent = '0';
+    function updateScoreboard() {
+        team1Score.textContent = scores[currentScores[0]];
+        team2Score.textContent = scores[currentScores[1]];
+
+        for (let i = 0; i < 3; i++) {
+            document.querySelector(`.team1 .set${i + 1}`).textContent = sets[i][0];
+            document.querySelector(`.team2 .set${i + 1}`).textContent = sets[i][1];
+        }
     }
 
     function resetGame() {
-        scores = [0, 0];
-        sets = [0, 0];
-        team1Score.textContent = '0';
-        team2Score.textContent = '0';
-        team1Sets.textContent = '0';
-        team2Sets.textContent = '0';
+        currentScores = [0, 0];
+        sets = [[0, 0], [0, 0], [0, 0]];
+        currentSet = 0;
+        updateScoreboard();
     }
 
-    addPointButtons.forEach((button, index) => {
-        button.addEventListener('click', () => updateScore(index));
+    addPointButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+            const team = parseInt(button.getAttribute('data-team')) - 1;
+            updateScore(team);
+        });
     });
 
     resetButton.addEventListener('click', resetGame);
+
+    updateScoreboard();
 });
