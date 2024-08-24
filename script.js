@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const flagIcons = document.querySelectorAll('.flag-icon');
     const playerNames = document.querySelectorAll('.player-name');
     const toggleModeButton = document.getElementById('toggleMode');
+    const settingsButton = document.getElementById('settingsButton');
+    const settingsMenu = document.getElementById('settingsMenu');
 
     const scores = ['0', '15', '30', '40', 'AD'];
     let currentScores = [0, 0];
@@ -95,6 +97,10 @@ document.addEventListener('DOMContentLoaded', () => {
         toggleModeButton.textContent = isDarkMode ? 'Modo Claro' : 'Modo Oscuro';
     }
 
+    function toggleSettingsMenu() {
+        settingsMenu.classList.toggle('active');
+    }
+
     addPointButtons.forEach((button) => {
         button.addEventListener('click', () => {
             const team = parseInt(button.getAttribute('data-team')) - 1;
@@ -105,6 +111,7 @@ document.addEventListener('DOMContentLoaded', () => {
     undoButton.addEventListener('click', undo);
     resetButton.addEventListener('click', resetGame);
     toggleModeButton.addEventListener('click', toggleMode);
+    settingsButton.addEventListener('click', toggleSettingsMenu);
 
     flagIcons.forEach(flag => {
         flag.addEventListener('click', () => {
@@ -123,6 +130,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 name.textContent = `Jugador ${name.getAttribute('data-team')}${name.getAttribute('data-player')}`;
             }
         });
+    });
+
+    // Close settings menu when clicking outside
+    document.addEventListener('click', (event) => {
+        if (!settingsButton.contains(event.target) && !settingsMenu.contains(event.target)) {
+            settingsMenu.classList.remove('active');
+        }
     });
 
     updateScoreboard();

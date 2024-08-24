@@ -6,11 +6,15 @@
     <title>Scoreboard de Pádel</title>
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/flag-icon-css/3.5.0/css/flag-icon.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
 </head>
 <body>
     <div class="container">
         <div class="settings">
-            <button id="toggleMode">Cambiar Modo</button>
+            <button id="settingsButton"><i class="fas fa-cog"></i></button>
+            <div id="settingsMenu" class="settings-menu">
+                <button id="toggleMode">Cambiar Modo</button>
+            </div>
         </div>
         <h1>Scoreboard de Pádel</h1>
         <div class="scoreboard">
@@ -38,7 +42,7 @@
             </div>
             <table class="scores">
                 <tr>
-                    <th>Puntos</th>
+                    <th></th>
                     <th>Set 1</th>
                     <th>Set 2</th>
                     <th>Set 3</th>
