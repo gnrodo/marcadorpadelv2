@@ -32,12 +32,19 @@ table {
 th, td {
     border: 1px solid #ddd;
     padding: 10px;
-    text-align: center;
 }
 
 th {
     background-color: #4CAF50;
     color: white;
+}
+
+.left-align {
+    text-align: left;
+}
+
+.right-align {
+    text-align: right;
 }
 
 .controls {
@@ -60,10 +67,28 @@ button:hover {
     background-color: #45a049;
 }
 
-#reset {
+#reset, #undo {
     background-color: #f44336;
 }
 
-#reset:hover {
+#reset:hover, #undo:hover {
     background-color: #d32f2f;
+}
+
+.player {
+    display: flex;
+    align-items: center;
+}
+
+.flag-icon {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+.player-name {
+    cursor: text;
+}
+
+.golden {
+    background-color: gold;
 }
