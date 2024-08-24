@@ -17,12 +17,15 @@ document.addEventListener('DOMContentLoaded', () => {
     let sets = [[0, 0], [0, 0], [0, 0]];
     let currentSet = 0;
     let history = [];
+    let isGameOver = false;
 
     const fonts = ['Roboto', 'Open Sans', 'Lato', 'Montserrat'];
     let currentFontIndex = 0;
     let currentFontSize = 16;
 
     function updateScore(team) {
+        if (isGameOver) return;
+
         history.push({currentScores: [...currentScores], sets: JSON.parse(JSON.stringify(sets)), currentSet});
         
         const otherTeam = team === 0 ? 1 : 0;
@@ -54,9 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function winSet(team) {
         currentSet++;
-        if (currentSet === 3 || (currentSet === 2 && sets[0][team] === 1)) {
+        if (currentSet === 3 || (currentSet === 2 && sets[0][team] === 1 && sets[1][team] === 1)) {
             // Game over, team wins
+            isGameOver = true;
             alert(`¡El Equipo ${team + 1} gana el partido!`);
+            disablePointButtons();
         }
     }
 
@@ -80,6 +85,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function undo() {
+        if (isGameOver) return;
+
         if (history.length > 0) {
             const lastState = history.pop();
             currentScores = lastState.currentScores;
@@ -94,7 +101,19 @@ document.addEventListener('DOMContentLoaded', () => {
         sets = [[0, 0], [0, 0], [0, 0]];
         currentSet = 0;
         history = [];
+        isGameOver = false;
         updateScoreboard();
+        enablePointButtons();
+    }
+
+    function disablePointButtons() {
+        addPointButtons.forEach(button => button.disabled = true);
+        undoButton.disabled = true;
+    }
+
+    function enablePointButtons() {
+        addPointButtons.forEach(button => button.disabled = false);
+        undoButton.disabled = false;
     }
 
     function toggleMode() {
