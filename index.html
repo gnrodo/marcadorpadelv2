@@ -18,9 +18,16 @@
         </div>
         <h1>Scoreboard de Pádel</h1>
         <div class="scoreboard">
-            <div class="teams-and-scores">
-                <div class="team-row">
-                    <div class="team team1">
+            <table>
+                <tr>
+                    <th class="players-column">Jugadores</th>
+                    <th>Set 1</th>
+                    <th>Set 2</th>
+                    <th>Set 3</th>
+                    <th>Puntos</th>
+                </tr>
+                <tr class="team1">
+                    <td class="players-column">
                         <div class="player">
                             <span class="flag-icon flag-icon-es" data-team="1" data-player="1"></span>
                             <span class="player-name" contenteditable="true" data-team="1" data-player="1">Jugador 1</span>
@@ -29,16 +36,14 @@
                             <span class="flag-icon flag-icon-es" data-team="1" data-player="2"></span>
                             <span class="player-name" contenteditable="true" data-team="1" data-player="2">Jugador 2</span>
                         </div>
-                    </div>
-                    <div class="score-row team1-score">
-                        <div class="current-score">0</div>
-                        <div class="set1">0</div>
-                        <div class="set2">0</div>
-                        <div class="set3">0</div>
-                    </div>
-                </div>
-                <div class="team-row">
-                    <div class="team team2">
+                    </td>
+                    <td class="set1">0</td>
+                    <td class="set2">0</td>
+                    <td class="set3">0</td>
+                    <td class="current-score">0</td>
+                </tr>
+                <tr class="team2">
+                    <td class="players-column">
                         <div class="player">
                             <span class="flag-icon flag-icon-es" data-team="2" data-player="1"></span>
                             <span class="player-name" contenteditable="true" data-team="2" data-player="1">Jugador 3</span>
@@ -47,19 +52,17 @@
                             <span class="flag-icon flag-icon-es" data-team="2" data-player="2"></span>
                             <span class="player-name" contenteditable="true" data-team="2" data-player="2">Jugador 4</span>
                         </div>
-                    </div>
-                    <div class="score-row team2-score">
-                        <div class="current-score">0</div>
-                        <div class="set1">0</div>
-                        <div class="set2">0</div>
-                        <div class="set3">0</div>
-                    </div>
-                </div>
-            </div>
+                    </td>
+                    <td class="set1">0</td>
+                    <td class="set2">0</td>
+                    <td class="set3">0</td>
+                    <td class="current-score">0</td>
+                </tr>
+            </table>
         </div>
         <div class="controls">
-            <button class="add-point" data-team="1">Punto Equipo 1</button>
-            <button class="add-point" data-team="2">Punto Equipo 2</button>
+            <button class="add-point" data-team="1">Equipo 1</button>
+            <button class="add-point" data-team="2">Equipo 2</button>
             <button id="undo">Deshacer</button>
             <button id="reset">Reiniciar Juego</button>
         </div>

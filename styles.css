@@ -16,8 +16,8 @@ body {
     padding: 30px;
     text-align: center;
     width: 100%;
-    max-width: 836px; /* 896px - 60px (30px padding on each side) */
-    height: 354px; /* 414px - 60px (30px padding on top and bottom) */
+    max-width: 836px;
+    height: 354px;
     position: relative;
     transition: background-color 0.3s, color 0.3s;
     display: flex;
@@ -67,24 +67,25 @@ h1 {
     align-items: center;
 }
 
-.teams-and-scores {
-    display: flex;
-    flex-direction: column;
+table {
     width: 100%;
+    border-collapse: collapse;
 }
 
-.team-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
 }
 
-.team {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 50%;
+th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.players-column {
+    width: 60%;
+    text-align: left;
 }
 
 .player {
@@ -100,19 +101,6 @@ h1 {
 
 .player-name {
     cursor: text;
-}
-
-.score-row {
-    display: flex;
-    justify-content: space-between;
-    width: 50%;
-}
-
-.score-row > div {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #ddd;
-    text-align: center;
 }
 
 .controls {
@@ -171,9 +159,12 @@ body.dark-mode {
     border-color: #ecf0f1;
 }
 
-.dark-mode .score-row > div {
+.dark-mode th, .dark-mode td {
     border-color: #7f8c8d;
-    color: #ecf0f1;
+}
+
+.dark-mode th {
+    background-color: #2980b9;
 }
 
 .dark-mode button {
