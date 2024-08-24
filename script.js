@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const flagIcons = document.querySelectorAll('.flag-icon');
     const playerNames = document.querySelectorAll('.player-name');
     const toggleModeButton = document.getElementById('toggleMode');
+    const changeFontButton = document.getElementById('changeFont');
+    const changeFontSizeButton = document.getElementById('changeFontSize');
     const settingsButton = document.getElementById('settingsButton');
     const settingsMenu = document.getElementById('settingsMenu');
 
@@ -15,6 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
     let sets = [[0, 0], [0, 0], [0, 0]];
     let currentSet = 0;
     let history = [];
+
+    const fonts = ['Arial', 'Helvetica', 'Verdana', 'Times New Roman', 'Courier'];
+    let currentFontIndex = 0;
+    let currentFontSize = 16;
 
     function updateScore(team) {
         history.push({currentScores: [...currentScores], sets: JSON.parse(JSON.stringify(sets)), currentSet});
@@ -93,8 +99,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function toggleMode() {
         document.body.classList.toggle('dark-mode');
-        const isDarkMode = document.body.classList.contains('dark-mode');
-        toggleModeButton.textContent = isDarkMode ? 'Modo Claro' : 'Modo Oscuro';
+    }
+
+    function changeFont() {
+        currentFontIndex = (currentFontIndex + 1) % fonts.length;
+        document.body.style.fontFamily = fonts[currentFontIndex];
+    }
+
+    function changeFontSize() {
+        currentFontSize = currentFontSize === 16 ? 18 : 16;
+        document.body.style.fontSize = `${currentFontSize}px`;
     }
 
     function toggleSettingsMenu() {
@@ -111,6 +125,8 @@ document.addEventListener('DOMContentLoaded', () => {
     undoButton.addEventListener('click', undo);
     resetButton.addEventListener('click', resetGame);
     toggleModeButton.addEventListener('click', toggleMode);
+    changeFontButton.addEventListener('click', changeFont);
+    changeFontSizeButton.addEventListener('click', changeFontSize);
     settingsButton.addEventListener('click', toggleSettingsMenu);
 
     flagIcons.forEach(flag => {

@@ -6,7 +6,7 @@ body {
     align-items: center;
     height: 100vh;
     margin: 0;
-    transition: background-color 0.3s, color 0.3s;
+    transition: background-color 0.3s, color 0.3s, font-family 0.3s, font-size 0.3s;
 }
 
 .container {
@@ -61,6 +61,13 @@ h1 {
     display: block;
 }
 
+.settings-menu button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    margin-bottom: 5px;
+}
+
 .scoreboard {
     display: flex;
     justify-content: center;
@@ -109,6 +116,7 @@ td {
 .set1, .set2, .set3, .current-score {
     font-size: 24px;
     font-weight: bold;
+    min-width: 50px;
 }
 
 .controls {
