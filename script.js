@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentSet = 0;
     let history = [];
     let isGameOver = false;
+    let isTiebreak = false;
 
     const fonts = ['Roboto', 'Open Sans', 'Lato', 'Montserrat'];
     let currentFontIndex = 0;
@@ -26,19 +27,26 @@ document.addEventListener('DOMContentLoaded', () => {
     function updateScore(team) {
         if (isGameOver) return;
 
-        history.push({currentScores: [...currentScores], sets: JSON.parse(JSON.stringify(sets)), currentSet});
+        history.push({currentScores: [...currentScores], sets: JSON.parse(JSON.stringify(sets)), currentSet, isTiebreak});
         
         const otherTeam = team === 0 ? 1 : 0;
         
-        if (currentScores[team] === 3 && currentScores[otherTeam] === 3) {
-            // Punto de oro
-            winGame(team);
-        } else if (currentScores[team] === 3 && currentScores[otherTeam] < 3) {
-            winGame(team);
-        } else if (currentScores[team] === 4) {
-            winGame(team);
-        } else {
+        if (isTiebreak) {
             currentScores[team]++;
+            if (currentScores[team] >= 7 && currentScores[team] - currentScores[otherTeam] >= 2) {
+                winGame(team);
+            }
+        } else {
+            if (currentScores[team] === 3 && currentScores[otherTeam] === 3) {
+                // Punto de oro
+                winGame(team);
+            } else if (currentScores[team] === 3 && currentScores[otherTeam] < 3) {
+                winGame(team);
+            } else if (currentScores[team] === 4) {
+                winGame(team);
+            } else {
+                currentScores[team]++;
+            }
         }
 
         updateScoreboard();
@@ -46,36 +54,48 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function winGame(team) {
         sets[currentSet][team]++;
-        if (sets[currentSet][team] >= 6 && sets[currentSet][team] - sets[currentSet][1 - team] >= 2) {
-            winSet(team);
-        } else if (sets[currentSet][team] === 7) {
+        if (sets[currentSet][0] === 6 && sets[currentSet][1] === 6) {
+            isTiebreak = true;
+        } else if (sets[currentSet][team] >= 6 && sets[currentSet][team] - sets[currentSet][1 - team] >= 2) {
             winSet(team);
         }
-        currentScores = [0, 0];
+        currentScores = isTiebreak ? [0, 0] : [0, 0];
         updateScoreboard();
     }
 
     function winSet(team) {
-        currentSet++;
-        if (currentSet === 3 || (currentSet === 2 && sets[0][team] === 1 && sets[1][team] === 1)) {
+        isTiebreak = false;
+        if (currentSet === 1 && sets[0][team] === 1) {
             // Game over, team wins
             isGameOver = true;
             alert(`¡El Equipo ${team + 1} gana el partido!`);
             disablePointButtons();
+        } else if (currentSet === 2) {
+            // Game over, team wins
+            isGameOver = true;
+            alert(`¡El Equipo ${team + 1} gana el partido!`);
+            disablePointButtons();
+        } else {
+            currentSet++;
         }
     }
 
     function updateScoreboard() {
-        team1Score.textContent = scores[currentScores[0]];
-        team2Score.textContent = scores[currentScores[1]];
+        if (isTiebreak) {
+            team1Score.textContent = currentScores[0].toString();
+            team2Score.textContent = currentScores[1].toString();
+        } else {
+            team1Score.textContent = scores[currentScores[0]];
+            team2Score.textContent = scores[currentScores[1]];
+        }
 
         for (let i = 0; i < 3; i++) {
             document.querySelector(`.team1 .set${i + 1}`).textContent = sets[i][0];
             document.querySelector(`.team2 .set${i + 1}`).textContent = sets[i][1];
         }
 
-        // Highlight cells if score is 40-40
-        if (currentScores[0] === 3 && currentScores[1] === 3) {
+        // Highlight cells if score is 40-40 or in tiebreak
+        if ((currentScores[0] === 3 && currentScores[1] === 3) || isTiebreak) {
             team1Score.classList.add('golden');
             team2Score.classList.add('golden');
         } else {
@@ -92,6 +112,7 @@ document.addEventListener('DOMContentLoaded', () => {
             currentScores = lastState.currentScores;
             sets = lastState.sets;
             currentSet = lastState.currentSet;
+            isTiebreak = lastState.isTiebreak;
             updateScoreboard();
         }
     }
@@ -102,6 +123,7 @@ document.addEventListener('DOMContentLoaded', () => {
         currentSet = 0;
         history = [];
         isGameOver = false;
+        isTiebreak = false;
         updateScoreboard();
         enablePointButtons();
     }
