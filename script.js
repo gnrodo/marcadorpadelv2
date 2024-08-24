@@ -191,9 +191,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     playerNames.forEach(name => {
+        let originalName = name.textContent;
+
+        name.addEventListener('click', () => {
+            name.textContent = '';
+            name.focus();
+        });
+
         name.addEventListener('blur', () => {
             if (name.textContent.trim() === '') {
-                name.textContent = `Jugador ${name.getAttribute('data-team')}${name.getAttribute('data-player')}`;
+                name.textContent = originalName;
+            } else {
+                originalName = name.textContent;
+            }
+        });
+
+        name.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                name.blur();
             }
         });
     });
