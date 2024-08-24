@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (isTiebreak) {
             currentScores[team]++;
             if (currentScores[team] >= 7 && currentScores[team] - currentScores[otherTeam] >= 2) {
-                winGame(team);
+                winTiebreak(team);
             }
         } else {
             if (currentScores[team] === 3 && currentScores[otherTeam] === 3) {
@@ -56,16 +56,25 @@ document.addEventListener('DOMContentLoaded', () => {
         sets[currentSet][team]++;
         if (sets[currentSet][0] === 6 && sets[currentSet][1] === 6) {
             isTiebreak = true;
+            currentScores = [0, 0];
         } else if (sets[currentSet][team] >= 6 && sets[currentSet][team] - sets[currentSet][1 - team] >= 2) {
             winSet(team);
+        } else {
+            currentScores = [0, 0];
         }
-        currentScores = isTiebreak ? [0, 0] : [0, 0];
         updateScoreboard();
+    }
+
+    function winTiebreak(team) {
+        sets[currentSet][team] = 7;
+        sets[currentSet][1 - team] = 6;
+        winSet(team);
     }
 
     function winSet(team) {
         console.log(`El Equipo ${team + 1} ha ganado el set ${currentSet + 1}`);
         isTiebreak = false;
+        currentScores = [0, 0];
         
         const setsWon = sets.filter(set => set[team] > set[1 - team]).length;
         
@@ -94,8 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector(`.team2 .set${i + 1}`).textContent = sets[i][1];
         }
 
-        // Highlight cells if score is 40-40 or in tiebreak
-        if ((currentScores[0] === 3 && currentScores[1] === 3) || isTiebreak) {
+        // Highlight cells if score is 40-40 (punto de oro)
+        if (currentScores[0] === 3 && currentScores[1] === 3) {
             team1Score.classList.add('golden');
             team2Score.classList.add('golden');
         } else {
