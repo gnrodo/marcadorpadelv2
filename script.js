@@ -64,15 +64,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function winSet(team) {
+        console.log(`El Equipo ${team + 1} ha ganado el set ${currentSet + 1}`);
         isTiebreak = false;
-        if (currentSet === 1 && sets[0][team] === 1) {
+        
+        const setsWon = sets.filter(set => set[team] > set[1 - team]).length;
+        
+        if (setsWon === 2) {
             // Game over, team wins
             isGameOver = true;
-            alert(`¡El Equipo ${team + 1} gana el partido!`);
-            disablePointButtons();
-        } else if (currentSet === 2) {
-            // Game over, team wins
-            isGameOver = true;
+            console.log(`¡El Equipo ${team + 1} gana el partido!`);
             alert(`¡El Equipo ${team + 1} gana el partido!`);
             disablePointButtons();
         } else {
