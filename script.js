@@ -103,8 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
             document.querySelector(`.team2 .set${i + 1}`).textContent = sets[i][1];
         }
 
-        // Highlight cells if score is 40-40 (punto de oro)
-        if (currentScores[0] === 3 && currentScores[1] === 3) {
+        // Highlight cells if score is 40-40 (punto de oro), but not during tiebreak
+        if (currentScores[0] === 3 && currentScores[1] === 3 && !isTiebreak) {
             team1Score.classList.add('golden');
             team2Score.classList.add('golden');
         } else {
