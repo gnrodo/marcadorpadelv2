@@ -23,36 +23,48 @@ struct ScoreboardView: View {
                                 .foregroundColor(scoreboardModel.textColor(for: colorScheme))
                         }
                         .popover(isPresented: $showingSettingsMenu) {
-                            VStack {
+                            VStack(spacing: 10) {
                                 Button("Cambiar modo") {
                                     scoreboardModel.toggleDarkMode()
                                 }
+                                .buttonStyle(RoundedButtonStyle())
+                                
                                 Button("Cambiar fuente") {
                                     scoreboardModel.changeFont()
                                 }
+                                .buttonStyle(RoundedButtonStyle())
+                                
                                 Button("Cambiar tamaño de fuente") {
                                     scoreboardModel.changeFontSize()
                                 }
+                                .buttonStyle(RoundedButtonStyle())
+                                
                                 Button("Cancelar") {
                                     showingSettingsMenu = false
                                 }
+                                .buttonStyle(RoundedButtonStyle())
                             }
                             .padding()
                         }
                     }
                     .padding(.horizontal)
 
-                    HStack {
-                        Text("").frame(width: geometry.size.width * 0.6)
-                        ForEach(["Set 1", "Set 2", "Set 3", ""], id: \.self) { header in
-                            Text(header)
-                                .frame(width: geometry.size.width * 0.1)
+                    VStack {
+                        HStack {
+                            Text("").frame(width: geometry.size.width * 0.6)
+                            ForEach(["Set 1", "Set 2", "Set 3", ""], id: \.self) { header in
+                                Text(header)
+                                    .frame(width: geometry.size.width * 0.1)
+                            }
                         }
-                    }
-
-                    VStack(spacing: 20) {
-                        ScoreboardRowView(team: .team1, scoreboardModel: scoreboardModel, geometry: geometry)
-                        ScoreboardRowView(team: .team2, scoreboardModel: scoreboardModel, geometry: geometry)
+                        .padding(.bottom, 5)
+                        
+                        VStack(spacing: 0) {
+                            ScoreboardRowView(team: .team1, scoreboardModel: scoreboardModel, geometry: geometry)
+                            Divider()
+                            ScoreboardRowView(team: .team2, scoreboardModel: scoreboardModel, geometry: geometry)
+                        }
+                        .border(Color.gray, width: 1)
                     }
 
                     HStack {
@@ -60,10 +72,12 @@ struct ScoreboardView: View {
                             scoreboardModel.undo()
                         }
                         .disabled(!scoreboardModel.canUndo)
+                        .buttonStyle(RoundedButtonStyle())
 
-                        Button("Reiniciar Juego") {
+                        Button("Reiniciar") {
                             scoreboardModel.resetGame()
                         }
+                        .buttonStyle(RoundedButtonStyle())
                     }
                     .padding()
                 }
@@ -117,6 +131,18 @@ struct ScoreboardRowView: View {
                     scoreboardModel.updateScore(team: team)
                 }
         }
+        .padding(.vertical, 5)
+    }
+}
+
+struct RoundedButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(8)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1)
     }
 }
 

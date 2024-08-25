@@ -23,7 +23,7 @@ class ScoreboardModel: ObservableObject {
     @Published var isTiebreak = false
     @Published var winnerMessage = ""
     
-    @Published var isDarkMode = false
+    @Published var isDarkMode = true
     @Published var currentFont = "Roboto"
     @Published var currentFontSize: CGFloat = 16
     
