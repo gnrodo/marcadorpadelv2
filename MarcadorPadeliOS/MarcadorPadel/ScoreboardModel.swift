@@ -148,6 +148,14 @@ class ScoreboardModel: ObservableObject {
     func textColor(for colorScheme: ColorScheme) -> Color {
         colorScheme == .dark ? Color.white : Color.black
     }
+    
+    func tableBackgroundColor(for colorScheme: ColorScheme) -> Color {
+        colorScheme == .dark ? Color(red: 0.22, green: 0.22, blue: 0.23) : Color(red: 0.95, green: 0.95, blue: 0.97)
+    }
+    
+    func tableBorderColor(for colorScheme: ColorScheme) -> Color {
+        colorScheme == .dark ? Color(red: 0.33, green: 0.33, blue: 0.35) : Color(red: 0.85, green: 0.85, blue: 0.87)
+    }
 }
 
 struct GameState {

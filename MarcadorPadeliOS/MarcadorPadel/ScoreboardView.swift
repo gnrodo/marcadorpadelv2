@@ -69,9 +69,15 @@ struct ScoreboardView: View {
                             VStack(spacing: 0) {
                                 ScoreboardRowView(team: .team1, scoreboardModel: scoreboardModel, geometry: geometry)
                                 Divider()
+                                    .background(scoreboardModel.tableBorderColor(for: colorScheme))
                                 ScoreboardRowView(team: .team2, scoreboardModel: scoreboardModel, geometry: geometry)
                             }
-                            .border(Color.gray, width: 1)
+                            .background(scoreboardModel.tableBackgroundColor(for: colorScheme))
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(scoreboardModel.tableBorderColor(for: colorScheme), lineWidth: 1)
+                            )
                         }
 
                         HStack {
@@ -130,6 +136,7 @@ struct ScoreboardRowView: View {
                 HStack(spacing: 0) {
                     if index > 0 {
                         Divider().frame(height: 50)
+                            .background(scoreboardModel.tableBorderColor(for: colorScheme))
                     }
                     if index < 3 {
                         Text("\(scoreboardModel.sets[index][team == .team1 ? 0 : 1])")
