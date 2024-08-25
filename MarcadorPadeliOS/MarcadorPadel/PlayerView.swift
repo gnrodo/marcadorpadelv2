@@ -13,7 +13,7 @@ struct PlayerView: View {
                 .font(.system(size: 20))
                 .padding(.leading, 10)
             Text(player.name)
-                .font(.system(size: 20))
+                .font(.system(size: 18))
                 .onTapGesture {
                     isEditingName = true
                     newName = player.name
@@ -31,7 +31,7 @@ struct PlayerView: View {
                         isEditingName = false
                     }
                     .buttonStyle(RedButtonStyle())
-                    Button("Cancelar") {
+                    Button("Volver") {
                         isEditingName = false
                     }
                     .buttonStyle(RedButtonStyle())
@@ -57,7 +57,7 @@ struct PlayerView: View {
                         isEditingFlag = false
                     }
                     .buttonStyle(RedButtonStyle())
-                    Button("Cancelar") {
+                    Button("Volver") {
                         isEditingFlag = false
                     }
                     .buttonStyle(RedButtonStyle())

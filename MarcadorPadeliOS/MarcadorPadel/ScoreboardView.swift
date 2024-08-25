@@ -141,19 +141,17 @@ struct ScoreboardRowView: View {
                 if index < 3 {
                     Text("\(scoreboardModel.sets[index][team == .team1 ? 0 : 1])")
                         .font(.system(size: 24, weight: .bold))
-                        .frame(width: geometry.size.width * 0.1)
+                        .frame(width: geometry.size.width * 0.1, height: 50)
                 } else {
                     ZStack {
-                        if scoreboardModel.isPuntoDeOro {
-                            Rectangle()
-                                .fill(Color.yellow)
-                                .frame(width: geometry.size.width * 0.1, height: 50)
-                        }
+                        Rectangle()
+                            .fill(scoreboardModel.isPuntoDeOro ? Color.yellow : Color.clear)
+                            .frame(width: geometry.size.width * 0.1, height: 50)
                         Text(scoreboardModel.currentScoreString(for: team))
                             .font(.system(size: 24, weight: .bold))
-                            .frame(width: geometry.size.width * 0.1)
                             .foregroundColor(scoreboardModel.textColor(for: colorScheme))
                     }
+                    .frame(width: geometry.size.width * 0.1, height: 50)
                     .onTapGesture {
                         scoreboardModel.updateScore(team: team)
                     }
