@@ -146,7 +146,6 @@ struct ScoreboardRowView: View {
                     ZStack {
                         Rectangle()
                             .fill(scoreboardModel.isPuntoDeOro ? Color.yellow : Color.clear)
-                            .frame(width: geometry.size.width * 0.1, height: 60)
                         Text(scoreboardModel.currentScoreString(for: team))
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(scoreboardModel.textColor(for: colorScheme))
