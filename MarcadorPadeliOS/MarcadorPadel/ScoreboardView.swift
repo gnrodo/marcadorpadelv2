@@ -1,5 +1,4 @@
 import SwiftUI
-import Styles
 
 struct ScoreboardView: View {
     @ObservedObject var scoreboardModel: ScoreboardModel

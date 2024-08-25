@@ -1,5 +1,4 @@
 import SwiftUI
-import Styles
 
 struct PlayerView: View {
     @Binding var player: Player
