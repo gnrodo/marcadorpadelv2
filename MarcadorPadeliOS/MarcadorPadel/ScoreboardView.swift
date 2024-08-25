@@ -61,7 +61,6 @@ struct ScoreboardView: View {
                                 ForEach(["Set 1", "Set 2", "Set 3", ""], id: \.self) { header in
                                     Text(header)
                                         .frame(width: geometry.size.width * 0.1)
-                                        .padding(.horizontal, 5)
                                 }
                             }
                             .padding(.bottom, 5)
@@ -133,29 +132,32 @@ struct ScoreboardRowView: View {
             .frame(width: geometry.size.width * 0.6, alignment: .leading)
 
             ForEach(0..<4) { index in
-                HStack(spacing: 0) {
-                    if index > 0 {
-                        Divider().frame(height: 50)
-                            .background(scoreboardModel.tableBorderColor(for: colorScheme))
-                    }
-                    if index < 3 {
-                        Text("\(scoreboardModel.sets[index][team == .team1 ? 0 : 1])")
-                            .font(.system(size: 24, weight: .bold))
-                            .frame(width: geometry.size.width * 0.1)
-                    } else {
+                if index > 0 {
+                    Divider().frame(height: 50)
+                        .background(scoreboardModel.tableBorderColor(for: colorScheme))
+                }
+                if index < 3 {
+                    Text("\(scoreboardModel.sets[index][team == .team1 ? 0 : 1])")
+                        .font(.system(size: 24, weight: .bold))
+                        .frame(width: geometry.size.width * 0.1)
+                } else {
+                    ZStack {
+                        if scoreboardModel.isPuntoDeOro {
+                            Rectangle()
+                                .fill(Color.yellow)
+                                .frame(width: geometry.size.width * 0.1, height: 50)
+                        }
                         Text(scoreboardModel.currentScoreString(for: team))
                             .font(.system(size: 24, weight: .bold))
                             .frame(width: geometry.size.width * 0.1)
-                            .background(scoreboardModel.isPuntoDeOro ? Color.yellow : Color.clear)
                             .foregroundColor(scoreboardModel.textColor(for: colorScheme))
-                            .onTapGesture {
-                                scoreboardModel.updateScore(team: team)
-                            }
+                    }
+                    .onTapGesture {
+                        scoreboardModel.updateScore(team: team)
                     }
                 }
             }
         }
-        .padding(.vertical, 5)
     }
 }
 
