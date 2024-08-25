@@ -13,7 +13,7 @@ struct PlayerView: View {
                 .font(.system(size: 20))
                 .padding(.leading, 10)
             Text(player.name)
-                .font(.system(size: 22))
+                .font(.system(size: 18))
                 .onTapGesture {
                     isEditingName = true
                     newName = player.name
@@ -30,11 +30,11 @@ struct PlayerView: View {
                         player.name = newName
                         isEditingName = false
                     }
-                    .buttonStyle(RoundedButtonStyle())
+                    .buttonStyle(RedButtonStyle())
                     Button("Cancelar") {
                         isEditingName = false
                     }
-                    .buttonStyle(RoundedButtonStyle())
+                    .buttonStyle(RedButtonStyle())
                 }
             }
             .padding()
@@ -56,11 +56,11 @@ struct PlayerView: View {
                         }
                         isEditingFlag = false
                     }
-                    .buttonStyle(RoundedButtonStyle())
+                    .buttonStyle(RedButtonStyle())
                     Button("Cancelar") {
                         isEditingFlag = false
                     }
-                    .buttonStyle(RoundedButtonStyle())
+                    .buttonStyle(RedButtonStyle())
                 }
             }
             .padding()
@@ -75,6 +75,17 @@ struct PlayerView: View {
             s.unicodeScalars.append(UnicodeScalar(base + v.value)!)
         }
         return s
+    }
+}
+
+struct RedButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .padding()
+            .background(Color.red)
+            .foregroundColor(.white)
+            .cornerRadius(8)
+            .scaleEffect(configuration.isPressed ? 0.95 : 1)
     }
 }
 
