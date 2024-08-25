@@ -18,19 +18,22 @@ struct ScoreboardView: View {
                             Image(systemName: "gearshape.fill")
                                 .foregroundColor(.primary)
                         }
-                        .actionSheet(isPresented: $showingSettingsMenu) {
-                            ActionSheet(title: Text("Ajustes"), buttons: [
-                                .default(Text("Cambiar modo")) {
+                        .popover(isPresented: $showingSettingsMenu) {
+                            VStack {
+                                Button("Cambiar modo") {
                                     scoreboardModel.toggleDarkMode()
-                                },
-                                .default(Text("Cambiar fuente")) {
+                                }
+                                Button("Cambiar fuente") {
                                     scoreboardModel.changeFont()
-                                },
-                                .default(Text("Cambiar tamaño de fuente")) {
+                                }
+                                Button("Cambiar tamaño de fuente") {
                                     scoreboardModel.changeFontSize()
-                                },
-                                .cancel()
-                            ])
+                                }
+                                Button("Cancelar") {
+                                    showingSettingsMenu = false
+                                }
+                            }
+                            .padding()
                         }
                     }
                     .padding(.horizontal)
@@ -41,7 +44,7 @@ struct ScoreboardView: View {
 
                     HStack {
                         Text("").frame(width: 150)
-                        ForEach(["Set 1", "Set 2", "Set 3", "Puntos"], id: \.self) { header in
+                        ForEach(["Set 1", "Set 2", "Set 3", ""], id: \.self) { header in
                             Text(header)
                                 .frame(width: 60)
                         }

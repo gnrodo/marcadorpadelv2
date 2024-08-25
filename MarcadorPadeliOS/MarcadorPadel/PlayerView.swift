@@ -20,31 +20,45 @@ struct PlayerView: View {
                     newName = player.name
                 }
         }
-        .sheet(isPresented: $isEditingName) {
+        .popover(isPresented: $isEditingName) {
             VStack {
                 TextField("Nombre del jugador", text: $newName)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
                 
-                Button("Guardar") {
-                    player.name = newName
-                    isEditingName = false
+                HStack {
+                    Button("Guardar") {
+                        player.name = newName
+                        isEditingName = false
+                    }
+                    Button("Cancelar") {
+                        isEditingName = false
+                    }
                 }
             }
+            .padding()
+            .frame(width: 300, height: 150)
         }
-        .sheet(isPresented: $isEditingFlag) {
+        .popover(isPresented: $isEditingFlag) {
             VStack {
                 TextField("Código de país de 2 letras (ej. es, ar, us)", text: $newFlag)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
                 
-                Button("Guardar") {
-                    if newFlag.count == 2 {
-                        player.flag = flagEmoji(from: newFlag)
+                HStack {
+                    Button("Guardar") {
+                        if newFlag.count == 2 {
+                            player.flag = flagEmoji(from: newFlag)
+                        }
+                        isEditingFlag = false
                     }
-                    isEditingFlag = false
+                    Button("Cancelar") {
+                        isEditingFlag = false
+                    }
                 }
             }
+            .padding()
+            .frame(width: 300, height: 150)
         }
     }
     
