@@ -7,67 +7,78 @@ struct ScoreboardView: View {
     @Environment(\.colorScheme) var colorScheme
 
     var body: some View {
-        NavigationView {
-            VStack {
-                HStack {
-                    Spacer()
-                    Button(action: {
-                        showingSettingsMenu.toggle()
-                    }) {
-                        Image(systemName: "gearshape.fill")
-                            .foregroundColor(.primary)
+        GeometryReader { geometry in
+            NavigationView {
+                VStack {
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            showingSettingsMenu.toggle()
+                        }) {
+                            Image(systemName: "gearshape.fill")
+                                .foregroundColor(.primary)
+                        }
+                        .actionSheet(isPresented: $showingSettingsMenu) {
+                            ActionSheet(title: Text("Ajustes"), buttons: [
+                                .default(Text("Cambiar modo")) {
+                                    scoreboardModel.toggleDarkMode()
+                                },
+                                .default(Text("Cambiar fuente")) {
+                                    scoreboardModel.changeFont()
+                                },
+                                .default(Text("Cambiar tamaño de fuente")) {
+                                    scoreboardModel.changeFontSize()
+                                },
+                                .cancel()
+                            ])
+                        }
                     }
-                    .actionSheet(isPresented: $showingSettingsMenu) {
-                        ActionSheet(title: Text("Ajustes"), buttons: [
-                            .default(Text("Cambiar modo")) {
-                                // Toggle dark mode
-                            },
-                            .default(Text("Cambiar fuente")) {
-                                // Change font
-                            },
-                            .default(Text("Cambiar tamaño de fuente")) {
-                                // Change font size
-                            },
-                            .cancel()
-                        ])
-                    }
-                }
-                .padding(.horizontal)
+                    .padding(.horizontal)
 
-                Text("Scoreboard de Pádel")
-                    .font(.largeTitle)
+                    Text("Scoreboard de Pádel")
+                        .font(.largeTitle)
+                        .padding()
+
+                    HStack {
+                        Text("").frame(width: 150)
+                        ForEach(["Set 1", "Set 2", "Set 3", "Puntos"], id: \.self) { header in
+                            Text(header)
+                                .frame(width: 60)
+                        }
+                    }
+
+                    VStack(spacing: 20) {
+                        ScoreboardRowView(team: .team1, scoreboardModel: scoreboardModel)
+                        ScoreboardRowView(team: .team2, scoreboardModel: scoreboardModel)
+                    }
+
+                    HStack {
+                        Button("Deshacer") {
+                            scoreboardModel.undo()
+                        }
+                        .disabled(!scoreboardModel.canUndo)
+
+                        Button("Reiniciar Juego") {
+                            scoreboardModel.resetGame()
+                        }
+                    }
                     .padding()
-
-                VStack(spacing: 20) {
-                    ScoreboardRowView(team: .team1, scoreboardModel: scoreboardModel)
-                    ScoreboardRowView(team: .team2, scoreboardModel: scoreboardModel)
                 }
-
-                HStack {
-                    Button("Deshacer") {
-                        scoreboardModel.undo()
-                    }
-                    .disabled(!scoreboardModel.canUndo)
-
-                    Button("Reiniciar Juego") {
-                        scoreboardModel.resetGame()
-                    }
+                .frame(width: geometry.size.width)
+                .alert(isPresented: $showingWinnerAlert) {
+                    Alert(
+                        title: Text("¡Fin del Partido!"),
+                        message: Text(scoreboardModel.winnerMessage),
+                        dismissButton: .default(Text("OK")) {
+                            scoreboardModel.resetGame()
+                        }
+                    )
                 }
-                .padding()
             }
-            .alert(isPresented: $showingWinnerAlert) {
-                Alert(
-                    title: Text("¡Fin del Partido!"),
-                    message: Text(scoreboardModel.winnerMessage),
-                    dismissButton: .default(Text("OK")) {
-                        scoreboardModel.resetGame()
-                    }
-                )
-            }
-        }
-        .onChange(of: scoreboardModel.isGameOver) { newValue in
-            if newValue {
-                showingWinnerAlert = true
+            .onChange(of: scoreboardModel.isGameOver) { newValue in
+                if newValue {
+                    showingWinnerAlert = true
+                }
             }
         }
     }
@@ -87,11 +98,11 @@ struct ScoreboardRowView: View {
 
             ForEach(0..<3) { index in
                 Text("\(scoreboardModel.sets[index][team == .team1 ? 0 : 1])")
-                    .frame(width: 40)
+                    .frame(width: 60)
             }
 
             Text(scoreboardModel.currentScoreString(for: team))
-                .frame(width: 40)
+                .frame(width: 60)
                 .foregroundColor(scoreboardModel.isPuntoDeOro ? .yellow : .primary)
                 .onTapGesture {
                     scoreboardModel.updateScore(team: team)

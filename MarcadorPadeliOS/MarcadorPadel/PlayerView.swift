@@ -10,7 +10,7 @@ struct PlayerView: View {
     var body: some View {
         HStack {
             Text(player.flag)
-                .font(.largeTitle)
+                .font(.title)
                 .onTapGesture {
                     isEditingFlag = true
                 }
@@ -40,12 +40,21 @@ struct PlayerView: View {
                 
                 Button("Guardar") {
                     if newFlag.count == 2 {
-                        player.flag = String(UnicodeScalar(127397 + newFlag.lowercased().unicodeScalars.first!.value)!)
+                        player.flag = flagEmoji(from: newFlag)
                     }
                     isEditingFlag = false
                 }
             }
         }
+    }
+    
+    func flagEmoji(from countryCode: String) -> String {
+        let base : UInt32 = 127397
+        var s = ""
+        for v in countryCode.uppercased().unicodeScalars {
+            s.unicodeScalars.append(UnicodeScalar(base + v.value)!)
+        }
+        return s
     }
 }
 

@@ -1,4 +1,4 @@
-import Foundation
+import SwiftUI
 
 struct Player {
     var name: String
@@ -22,6 +22,10 @@ class ScoreboardModel: ObservableObject {
     @Published var isGameOver = false
     @Published var isTiebreak = false
     @Published var winnerMessage = ""
+    
+    @Published var isDarkMode = false
+    @Published var currentFont = "Roboto"
+    @Published var currentFontSize: CGFloat = 16
     
     private let scores = ["0", "15", "30", "40", "AD"]
     private var history: [GameState] = []
@@ -120,6 +124,21 @@ class ScoreboardModel: ObservableObject {
     func currentScoreString(for team: Team) -> String {
         let index = team == .team1 ? 0 : 1
         return isTiebreak ? "\(currentScores[index])" : scores[currentScores[index]]
+    }
+    
+    func toggleDarkMode() {
+        isDarkMode.toggle()
+    }
+    
+    func changeFont() {
+        let fonts = ["Roboto", "Open Sans", "Lato", "Montserrat"]
+        if let currentIndex = fonts.firstIndex(of: currentFont) {
+            currentFont = fonts[(currentIndex + 1) % fonts.count]
+        }
+    }
+    
+    func changeFontSize() {
+        currentFontSize = currentFontSize == 16 ? 18 : 16
     }
 }
 
