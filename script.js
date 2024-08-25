@@ -1,7 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
     const team1Score = document.querySelector('.team1 .current-score');
     const team2Score = document.querySelector('.team2 .current-score');
-    const addPointButtons = document.querySelectorAll('.add-point');
     const undoButton = document.getElementById('undo');
     const resetButton = document.getElementById('reset');
     const flagIcons = document.querySelectorAll('.flag-icon');
@@ -83,7 +82,7 @@ document.addEventListener('DOMContentLoaded', () => {
             isGameOver = true;
             console.log(`¡El Equipo ${team + 1} gana el partido!`);
             alert(`¡El Equipo ${team + 1} gana el partido!`);
-            disablePointButtons();
+            disableScoreClicks();
         } else {
             currentSet++;
         }
@@ -134,16 +133,18 @@ document.addEventListener('DOMContentLoaded', () => {
         isGameOver = false;
         isTiebreak = false;
         updateScoreboard();
-        enablePointButtons();
+        enableScoreClicks();
     }
 
-    function disablePointButtons() {
-        addPointButtons.forEach(button => button.disabled = true);
+    function disableScoreClicks() {
+        team1Score.style.pointerEvents = 'none';
+        team2Score.style.pointerEvents = 'none';
         undoButton.disabled = true;
     }
 
-    function enablePointButtons() {
-        addPointButtons.forEach(button => button.disabled = false);
+    function enableScoreClicks() {
+        team1Score.style.pointerEvents = 'auto';
+        team2Score.style.pointerEvents = 'auto';
         undoButton.disabled = false;
     }
 
@@ -165,12 +166,8 @@ document.addEventListener('DOMContentLoaded', () => {
         settingsMenu.classList.toggle('active');
     }
 
-    addPointButtons.forEach((button) => {
-        button.addEventListener('click', () => {
-            const team = parseInt(button.getAttribute('data-team')) - 1;
-            updateScore(team);
-        });
-    });
+    team1Score.addEventListener('click', () => updateScore(0));
+    team2Score.addEventListener('click', () => updateScore(1));
 
     undoButton.addEventListener('click', undo);
     resetButton.addEventListener('click', resetGame);
