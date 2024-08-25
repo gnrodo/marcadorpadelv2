@@ -10,10 +10,8 @@ struct PlayerView: View {
     var body: some View {
         HStack {
             Text(player.flag)
-                .font(.title)
-                .onTapGesture {
-                    isEditingFlag = true
-                }
+                .font(.system(size: 20))
+                .padding(.leading, 10)
             Text(player.name)
                 .onTapGesture {
                     isEditingName = true
@@ -31,13 +29,18 @@ struct PlayerView: View {
                         player.name = newName
                         isEditingName = false
                     }
+                    .buttonStyle(RoundedButtonStyle())
                     Button("Cancelar") {
                         isEditingName = false
                     }
+                    .buttonStyle(RoundedButtonStyle())
                 }
             }
             .padding()
             .frame(width: 300, height: 150)
+        }
+        .onTapGesture {
+            isEditingFlag = true
         }
         .popover(isPresented: $isEditingFlag) {
             VStack {
@@ -52,9 +55,11 @@ struct PlayerView: View {
                         }
                         isEditingFlag = false
                     }
+                    .buttonStyle(RoundedButtonStyle())
                     Button("Cancelar") {
                         isEditingFlag = false
                     }
+                    .buttonStyle(RoundedButtonStyle())
                 }
             }
             .padding()
