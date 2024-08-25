@@ -135,23 +135,23 @@ struct ScoreboardRowView: View {
 
             ForEach(0..<4) { index in
                 if index > 0 {
-                    Divider().frame(height: 50)
+                    Divider().frame(height: 60)
                         .background(scoreboardModel.tableBorderColor(for: colorScheme))
                 }
                 if index < 3 {
                     Text("\(scoreboardModel.sets[index][team == .team1 ? 0 : 1])")
                         .font(.system(size: 24, weight: .bold))
-                        .frame(width: geometry.size.width * 0.1, height: 50)
+                        .frame(width: geometry.size.width * 0.1, height: 60)
                 } else {
                     ZStack {
                         Rectangle()
                             .fill(scoreboardModel.isPuntoDeOro ? Color.yellow : Color.clear)
-                            .frame(width: geometry.size.width * 0.1, height: 50)
+                            .frame(width: geometry.size.width * 0.1, height: 60)
                         Text(scoreboardModel.currentScoreString(for: team))
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(scoreboardModel.textColor(for: colorScheme))
                     }
-                    .frame(width: geometry.size.width * 0.1, height: 50)
+                    .frame(width: geometry.size.width * 0.1, height: 60)
                     .onTapGesture {
                         scoreboardModel.updateScore(team: team)
                     }
