@@ -5,6 +5,11 @@ struct Player {
     var flag: String
 }
 
+enum Team {
+    case team1
+    case team2
+}
+
 class ScoreboardModel: ObservableObject {
     @Published var team1Player1 = Player(name: "Jugador 1", flag: "🇪🇸")
     @Published var team1Player2 = Player(name: "Jugador 2", flag: "🇪🇸")
@@ -19,60 +24,87 @@ class ScoreboardModel: ObservableObject {
     @Published var winnerMessage = ""
     
     private let scores = ["0", "15", "30", "40", "AD"]
+    private var history: [GameState] = []
     
-    func updateScore(team: Int) {
-        let otherTeam = 1 - team
+    var canUndo: Bool {
+        !history.isEmpty
+    }
+    
+    var isPuntoDeOro: Bool {
+        currentScores[0] == 3 && currentScores[1] == 3 && !isTiebreak
+    }
+    
+    func updateScore(team: Team) {
+        if isGameOver { return }
+        
+        let teamIndex = team == .team1 ? 0 : 1
+        let otherTeamIndex = 1 - teamIndex
+        
+        history.append(GameState(currentScores: currentScores, sets: sets, currentSet: currentSet, isTiebreak: isTiebreak))
         
         if isTiebreak {
-            currentScores[team] += 1
-            if currentScores[team] >= 7 && currentScores[team] - currentScores[otherTeam] >= 2 {
+            currentScores[teamIndex] += 1
+            if currentScores[teamIndex] >= 7 && currentScores[teamIndex] - currentScores[otherTeamIndex] >= 2 {
                 winTiebreak(team: team)
             }
         } else {
-            if currentScores[team] == 3 && currentScores[otherTeam] == 3 {
+            if currentScores[teamIndex] == 3 && currentScores[otherTeamIndex] == 3 {
                 // Punto de oro
                 winGame(team: team)
-            } else if currentScores[team] == 3 && currentScores[otherTeam] < 3 {
+            } else if currentScores[teamIndex] == 3 && currentScores[otherTeamIndex] < 3 {
                 winGame(team: team)
-            } else if currentScores[team] == 4 {
+            } else if currentScores[teamIndex] == 4 {
                 winGame(team: team)
             } else {
-                currentScores[team] += 1
+                currentScores[teamIndex] += 1
             }
         }
     }
     
-    private func winGame(team: Int) {
-        sets[currentSet][team] += 1
+    private func winGame(team: Team) {
+        let teamIndex = team == .team1 ? 0 : 1
+        sets[currentSet][teamIndex] += 1
         if sets[currentSet][0] == 6 && sets[currentSet][1] == 6 {
             isTiebreak = true
             currentScores = [0, 0]
-        } else if sets[currentSet][team] >= 6 && sets[currentSet][team] - sets[currentSet][1 - team] >= 2 {
+        } else if sets[currentSet][teamIndex] >= 6 && sets[currentSet][teamIndex] - sets[currentSet][1 - teamIndex] >= 2 {
             winSet(team: team)
         } else {
             currentScores = [0, 0]
         }
     }
     
-    private func winTiebreak(team: Int) {
-        sets[currentSet][team] = 7
-        sets[currentSet][1 - team] = 6
+    private func winTiebreak(team: Team) {
+        let teamIndex = team == .team1 ? 0 : 1
+        sets[currentSet][teamIndex] = 7
+        sets[currentSet][1 - teamIndex] = 6
         winSet(team: team)
     }
     
-    private func winSet(team: Int) {
+    private func winSet(team: Team) {
         isTiebreak = false
         currentScores = [0, 0]
         
-        let setsWon = sets.filter { $0[team] > $0[1 - team] }.count
+        let teamIndex = team == .team1 ? 0 : 1
+        let setsWon = sets.filter { $0[teamIndex] > $0[1 - teamIndex] }.count
         
         if setsWon == 2 {
             isGameOver = true
-            let winnerNames = team == 0 ? [team1Player1.name, team1Player2.name] : [team2Player1.name, team2Player2.name]
+            let winnerNames = team == .team1 ? [team1Player1.name, team1Player2.name] : [team2Player1.name, team2Player2.name]
             winnerMessage = "¡\(winnerNames[0]) y \(winnerNames[1]) ganan el partido!"
         } else {
             currentSet += 1
         }
+    }
+    
+    func undo() {
+        guard let lastState = history.popLast() else { return }
+        currentScores = lastState.currentScores
+        sets = lastState.sets
+        currentSet = lastState.currentSet
+        isTiebreak = lastState.isTiebreak
+        isGameOver = false
+        winnerMessage = ""
     }
     
     func resetGame() {
@@ -82,5 +114,18 @@ class ScoreboardModel: ObservableObject {
         isGameOver = false
         isTiebreak = false
         winnerMessage = ""
+        history.removeAll()
     }
+    
+    func currentScoreString(for team: Team) -> String {
+        let index = team == .team1 ? 0 : 1
+        return isTiebreak ? "\(currentScores[index])" : scores[currentScores[index]]
+    }
+}
+
+struct GameState {
+    let currentScores: [Int]
+    let sets: [[Int]]
+    let currentSet: Int
+    let isTiebreak: Bool
 }

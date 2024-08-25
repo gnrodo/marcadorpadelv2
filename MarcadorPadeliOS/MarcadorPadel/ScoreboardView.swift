@@ -3,68 +3,99 @@ import SwiftUI
 struct ScoreboardView: View {
     @ObservedObject var scoreboardModel: ScoreboardModel
     @State private var showingWinnerAlert = false
-    
+    @State private var showingSettingsMenu = false
+    @Environment(\.colorScheme) var colorScheme
+
     var body: some View {
-        VStack {
-            Text("Marcador de Pádel")
-                .font(.largeTitle)
+        NavigationView {
+            VStack {
+                HStack {
+                    Spacer()
+                    Button(action: {
+                        showingSettingsMenu.toggle()
+                    }) {
+                        Image(systemName: "gearshape.fill")
+                            .foregroundColor(.primary)
+                    }
+                    .actionSheet(isPresented: $showingSettingsMenu) {
+                        ActionSheet(title: Text("Ajustes"), buttons: [
+                            .default(Text("Cambiar modo")) {
+                                // Toggle dark mode
+                            },
+                            .default(Text("Cambiar fuente")) {
+                                // Change font
+                            },
+                            .default(Text("Cambiar tamaño de fuente")) {
+                                // Change font size
+                            },
+                            .cancel()
+                        ])
+                    }
+                }
+                .padding(.horizontal)
+
+                Text("Scoreboard de Pádel")
+                    .font(.largeTitle)
+                    .padding()
+
+                VStack(spacing: 20) {
+                    ScoreboardRowView(team: .team1, scoreboardModel: scoreboardModel)
+                    ScoreboardRowView(team: .team2, scoreboardModel: scoreboardModel)
+                }
+
+                HStack {
+                    Button("Deshacer") {
+                        scoreboardModel.undo()
+                    }
+                    .disabled(!scoreboardModel.canUndo)
+
+                    Button("Reiniciar Juego") {
+                        scoreboardModel.resetGame()
+                    }
+                }
                 .padding()
-            
-            HStack {
-                VStack {
-                    PlayerView(player: $scoreboardModel.team1Player1)
-                    PlayerView(player: $scoreboardModel.team1Player2)
-                }
-                VStack {
-                    PlayerView(player: $scoreboardModel.team2Player1)
-                    PlayerView(player: $scoreboardModel.team2Player2)
-                }
             }
-            
-            HStack {
-                VStack {
-                    Text("Equipo 1")
-                    Text("Set 1: \(scoreboardModel.sets[0][0])")
-                    Text("Set 2: \(scoreboardModel.sets[1][0])")
-                    Text("Set 3: \(scoreboardModel.sets[2][0])")
-                    Text("Puntos: \(scoreboardModel.currentScores[0])")
-                    Button("Punto Equipo 1") {
-                        scoreboardModel.updateScore(team: 0)
-                        checkForWinner()
+            .alert(isPresented: $showingWinnerAlert) {
+                Alert(
+                    title: Text("¡Fin del Partido!"),
+                    message: Text(scoreboardModel.winnerMessage),
+                    dismissButton: .default(Text("OK")) {
+                        scoreboardModel.resetGame()
                     }
-                }
-                VStack {
-                    Text("Equipo 2")
-                    Text("Set 1: \(scoreboardModel.sets[0][1])")
-                    Text("Set 2: \(scoreboardModel.sets[1][1])")
-                    Text("Set 3: \(scoreboardModel.sets[2][1])")
-                    Text("Puntos: \(scoreboardModel.currentScores[1])")
-                    Button("Punto Equipo 2") {
-                        scoreboardModel.updateScore(team: 1)
-                        checkForWinner()
-                    }
-                }
+                )
             }
-            
-            Button("Reiniciar Juego") {
-                scoreboardModel.resetGame()
-            }
-            .padding()
         }
-        .alert(isPresented: $showingWinnerAlert) {
-            Alert(
-                title: Text("¡Fin del Partido!"),
-                message: Text(scoreboardModel.winnerMessage),
-                dismissButton: .default(Text("OK")) {
-                    scoreboardModel.resetGame()
-                }
-            )
+        .onChange(of: scoreboardModel.isGameOver) { newValue in
+            if newValue {
+                showingWinnerAlert = true
+            }
         }
     }
-    
-    private func checkForWinner() {
-        if scoreboardModel.isGameOver {
-            showingWinnerAlert = true
+}
+
+struct ScoreboardRowView: View {
+    let team: Team
+    @ObservedObject var scoreboardModel: ScoreboardModel
+
+    var body: some View {
+        HStack {
+            VStack {
+                PlayerView(player: team == .team1 ? $scoreboardModel.team1Player1 : $scoreboardModel.team2Player1)
+                PlayerView(player: team == .team1 ? $scoreboardModel.team1Player2 : $scoreboardModel.team2Player2)
+            }
+            .frame(width: 150, alignment: .leading)
+
+            ForEach(0..<3) { index in
+                Text("\(scoreboardModel.sets[index][team == .team1 ? 0 : 1])")
+                    .frame(width: 40)
+            }
+
+            Text(scoreboardModel.currentScoreString(for: team))
+                .frame(width: 40)
+                .foregroundColor(scoreboardModel.isPuntoDeOro ? .yellow : .primary)
+                .onTapGesture {
+                    scoreboardModel.updateScore(team: team)
+                }
         }
     }
 }
