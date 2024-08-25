@@ -27,7 +27,7 @@ struct ScoreboardView: View {
                                     .foregroundColor(scoreboardModel.textColor(for: colorScheme))
                             }
                             .popover(isPresented: $showingSettingsMenu) {
-                                VStack(spacing: 10) {
+                                VStack(spacing: 15) {
                                     Button("Cambiar modo") {
                                         scoreboardModel.toggleDarkMode()
                                     }

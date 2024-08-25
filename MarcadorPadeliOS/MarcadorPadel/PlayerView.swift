@@ -45,7 +45,7 @@ struct PlayerView: View {
         }
         .popover(isPresented: $isEditingFlag) {
             VStack {
-                TextField("Código de país de 2 letras (ej. es, ar, us)", text: $newFlag)
+                TextField("Código de país de 2 letras", text: $newFlag)
                     .textFieldStyle(RoundedBorderTextFieldStyle())
                     .padding()
                 
