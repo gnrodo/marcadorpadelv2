@@ -49,8 +49,8 @@ struct ScoreboardView: View {
                                     .buttonStyle(RedButtonStyle())
                                 }
                                 .padding()
-                                .background(scoreboardModel.backgroundColor(for: colorScheme))
-                                .foregroundColor(scoreboardModel.textColor(for: colorScheme))
+                                .background(scoreboardModel.backgroundColor(for: scoreboardModel.isDarkMode ? .dark : .light))
+                                .foregroundColor(scoreboardModel.textColor(for: scoreboardModel.isDarkMode ? .dark : .light))
                             }
                         }
                         .padding(.horizontal)
