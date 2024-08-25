@@ -31,22 +31,22 @@ struct ScoreboardView: View {
                                     Button("Cambiar modo") {
                                         scoreboardModel.toggleDarkMode()
                                     }
-                                    .buttonStyle(RoundedButtonStyle())
+                                    .buttonStyle(RedButtonStyle())
                                     
                                     Button("Cambiar fuente") {
                                         scoreboardModel.changeFont()
                                     }
-                                    .buttonStyle(RoundedButtonStyle())
+                                    .buttonStyle(RedButtonStyle())
                                     
                                     Button("Cambiar tamaño de fuente") {
                                         scoreboardModel.changeFontSize()
                                     }
-                                    .buttonStyle(RoundedButtonStyle())
+                                    .buttonStyle(RedButtonStyle())
                                     
                                     Button("Cancelar") {
                                         showingSettingsMenu = false
                                     }
-                                    .buttonStyle(RoundedButtonStyle())
+                                    .buttonStyle(RedButtonStyle())
                                 }
                                 .padding()
                                 .background(scoreboardModel.backgroundColor(for: colorScheme))
@@ -85,12 +85,12 @@ struct ScoreboardView: View {
                                 scoreboardModel.undo()
                             }
                             .disabled(!scoreboardModel.canUndo)
-                            .buttonStyle(RoundedButtonStyle())
+                            .buttonStyle(RedButtonStyle())
 
                             Button("Reiniciar") {
                                 scoreboardModel.resetGame()
                             }
-                            .buttonStyle(RoundedButtonStyle())
+                            .buttonStyle(RedButtonStyle())
                         }
                         .padding()
                     }
@@ -140,9 +140,11 @@ struct ScoreboardRowView: View {
                     }
                     if index < 3 {
                         Text("\(scoreboardModel.sets[index][team == .team1 ? 0 : 1])")
+                            .font(.system(size: 24, weight: .bold))
                             .frame(width: geometry.size.width * 0.1)
                     } else {
                         Text(scoreboardModel.currentScoreString(for: team))
+                            .font(.system(size: 24, weight: .bold))
                             .frame(width: geometry.size.width * 0.1)
                             .foregroundColor(scoreboardModel.isPuntoDeOro ? .yellow : scoreboardModel.textColor(for: colorScheme))
                             .onTapGesture {
@@ -156,11 +158,11 @@ struct ScoreboardRowView: View {
     }
 }
 
-struct RoundedButtonStyle: ButtonStyle {
+struct RedButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .padding()
-            .background(Color.blue)
+            .background(Color.red)
             .foregroundColor(.white)
             .cornerRadius(8)
             .scaleEffect(configuration.isPressed ? 0.95 : 1)
