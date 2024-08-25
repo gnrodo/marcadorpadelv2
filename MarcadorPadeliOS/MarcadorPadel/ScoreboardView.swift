@@ -158,17 +158,6 @@ struct ScoreboardRowView: View {
     }
 }
 
-struct RedButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .padding()
-            .background(Color.red)
-            .foregroundColor(.white)
-            .cornerRadius(8)
-            .scaleEffect(configuration.isPressed ? 0.95 : 1)
-    }
-}
-
 struct ScoreboardView_Previews: PreviewProvider {
     static var previews: some View {
         ScoreboardView(scoreboardModel: ScoreboardModel())
