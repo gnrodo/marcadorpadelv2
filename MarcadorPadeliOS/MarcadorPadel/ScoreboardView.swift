@@ -13,7 +13,7 @@ struct ScoreboardView: View {
                     scoreboardModel.backgroundColor(for: colorScheme)
                         .edgesIgnoringSafeArea(.all)
                     
-                    VStack {
+                    VStack(spacing: 20) {
                         HStack {
                             Spacer()
                             Text("Scoreboard de Pádel")
@@ -55,23 +55,22 @@ struct ScoreboardView: View {
                         }
                         .padding(.horizontal)
 
-                        VStack {
+                        VStack(spacing: 0) {
                             HStack(spacing: 0) {
                                 Text("").frame(width: geometry.size.width * 0.6)
                                 ForEach(["Set 1", "Set 2", "Set 3", ""], id: \.self) { header in
                                     Text(header)
                                         .frame(width: geometry.size.width * 0.1)
+                                        .font(.system(size: 18, weight: .bold))
                                 }
                             }
                             .padding(.bottom, 5)
                             
                             VStack(spacing: 0) {
                                 ScoreboardRowView(team: .team1, scoreboardModel: scoreboardModel, geometry: geometry)
-                                    .padding(.vertical, 10)
                                 Divider()
                                     .background(scoreboardModel.tableBorderColor(for: colorScheme))
                                 ScoreboardRowView(team: .team2, scoreboardModel: scoreboardModel, geometry: geometry)
-                                    .padding(.vertical, 10)
                             }
                             .background(scoreboardModel.tableBackgroundColor(for: colorScheme))
                             .cornerRadius(10)
@@ -81,7 +80,7 @@ struct ScoreboardView: View {
                             )
                         }
 
-                        HStack {
+                        HStack(spacing: 20) {
                             Button("Deshacer") {
                                 scoreboardModel.undo()
                             }
@@ -127,21 +126,22 @@ struct ScoreboardRowView: View {
 
     var body: some View {
         HStack(spacing: 0) {
-            VStack {
+            VStack(spacing: 5) {
                 PlayerView(player: team == .team1 ? $scoreboardModel.team1Player1 : $scoreboardModel.team2Player1)
                 PlayerView(player: team == .team1 ? $scoreboardModel.team1Player2 : $scoreboardModel.team2Player2)
             }
             .frame(width: geometry.size.width * 0.6, alignment: .leading)
+            .padding(.vertical, 5)
 
             ForEach(0..<4) { index in
                 if index > 0 {
-                    Divider().frame(height: 60)
+                    Divider().frame(height: 70)
                         .background(scoreboardModel.tableBorderColor(for: colorScheme))
                 }
                 if index < 3 {
                     Text("\(scoreboardModel.sets[index][team == .team1 ? 0 : 1])")
                         .font(.system(size: 24, weight: .bold))
-                        .frame(width: geometry.size.width * 0.1, height: 60)
+                        .frame(width: geometry.size.width * 0.1, height: 70)
                 } else {
                     ZStack {
                         Rectangle()
@@ -150,7 +150,7 @@ struct ScoreboardRowView: View {
                             .font(.system(size: 24, weight: .bold))
                             .foregroundColor(scoreboardModel.textColor(for: colorScheme))
                     }
-                    .frame(width: geometry.size.width * 0.1, height: 60)
+                    .frame(width: geometry.size.width * 0.1, height: 70)
                     .onTapGesture {
                         scoreboardModel.updateScore(team: team)
                     }
