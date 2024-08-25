@@ -140,6 +140,14 @@ class ScoreboardModel: ObservableObject {
     func changeFontSize() {
         currentFontSize = currentFontSize == 16 ? 18 : 16
     }
+    
+    func backgroundColor(for colorScheme: ColorScheme) -> Color {
+        colorScheme == .dark ? Color(red: 0.11, green: 0.11, blue: 0.12) : Color.white
+    }
+    
+    func textColor(for colorScheme: ColorScheme) -> Color {
+        colorScheme == .dark ? Color.white : Color.black
+    }
 }
 
 struct GameState {
