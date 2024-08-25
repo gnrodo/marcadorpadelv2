@@ -146,7 +146,8 @@ struct ScoreboardRowView: View {
                         Text(scoreboardModel.currentScoreString(for: team))
                             .font(.system(size: 24, weight: .bold))
                             .frame(width: geometry.size.width * 0.1)
-                            .foregroundColor(scoreboardModel.isPuntoDeOro ? .yellow : scoreboardModel.textColor(for: colorScheme))
+                            .background(scoreboardModel.isPuntoDeOro ? Color.yellow : Color.clear)
+                            .foregroundColor(scoreboardModel.textColor(for: colorScheme))
                             .onTapGesture {
                                 scoreboardModel.updateScore(team: team)
                             }
