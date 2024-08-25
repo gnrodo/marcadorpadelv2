@@ -43,7 +43,7 @@ struct ScoreboardView: View {
                                     }
                                     .buttonStyle(RedButtonStyle())
                                     
-                                    Button("Volver") {
+                                    Button("Cancelar") {
                                         showingSettingsMenu = false
                                     }
                                     .buttonStyle(RedButtonStyle())
@@ -67,9 +67,11 @@ struct ScoreboardView: View {
                             
                             VStack(spacing: 0) {
                                 ScoreboardRowView(team: .team1, scoreboardModel: scoreboardModel, geometry: geometry)
+                                    .padding(.vertical, 10)
                                 Divider()
                                     .background(scoreboardModel.tableBorderColor(for: colorScheme))
                                 ScoreboardRowView(team: .team2, scoreboardModel: scoreboardModel, geometry: geometry)
+                                    .padding(.vertical, 10)
                             }
                             .background(scoreboardModel.tableBackgroundColor(for: colorScheme))
                             .cornerRadius(10)
