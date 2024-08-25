@@ -11,6 +11,9 @@ struct ScoreboardView: View {
             NavigationView {
                 VStack {
                     HStack {
+                        Text("Scoreboard de Pádel")
+                            .font(.largeTitle)
+                            .padding()
                         Spacer()
                         Button(action: {
                             showingSettingsMenu.toggle()
@@ -38,21 +41,17 @@ struct ScoreboardView: View {
                     }
                     .padding(.horizontal)
 
-                    Text("Scoreboard de Pádel")
-                        .font(.largeTitle)
-                        .padding()
-
                     HStack {
-                        Text("").frame(width: 150)
+                        Text("").frame(width: geometry.size.width * 0.3)
                         ForEach(["Set 1", "Set 2", "Set 3", ""], id: \.self) { header in
                             Text(header)
-                                .frame(width: 60)
+                                .frame(width: geometry.size.width * 0.15)
                         }
                     }
 
                     VStack(spacing: 20) {
-                        ScoreboardRowView(team: .team1, scoreboardModel: scoreboardModel)
-                        ScoreboardRowView(team: .team2, scoreboardModel: scoreboardModel)
+                        ScoreboardRowView(team: .team1, scoreboardModel: scoreboardModel, geometry: geometry)
+                        ScoreboardRowView(team: .team2, scoreboardModel: scoreboardModel, geometry: geometry)
                     }
 
                     HStack {
@@ -78,10 +77,11 @@ struct ScoreboardView: View {
                     )
                 }
             }
-            .onChange(of: scoreboardModel.isGameOver) { newValue in
-                if newValue {
-                    showingWinnerAlert = true
-                }
+            .navigationViewStyle(StackNavigationViewStyle())
+        }
+        .onChange(of: scoreboardModel.isGameOver) { newValue in
+            if newValue {
+                showingWinnerAlert = true
             }
         }
     }
@@ -90,6 +90,7 @@ struct ScoreboardView: View {
 struct ScoreboardRowView: View {
     let team: Team
     @ObservedObject var scoreboardModel: ScoreboardModel
+    let geometry: GeometryProxy
 
     var body: some View {
         HStack {
@@ -97,15 +98,15 @@ struct ScoreboardRowView: View {
                 PlayerView(player: team == .team1 ? $scoreboardModel.team1Player1 : $scoreboardModel.team2Player1)
                 PlayerView(player: team == .team1 ? $scoreboardModel.team1Player2 : $scoreboardModel.team2Player2)
             }
-            .frame(width: 150, alignment: .leading)
+            .frame(width: geometry.size.width * 0.3, alignment: .leading)
 
             ForEach(0..<3) { index in
                 Text("\(scoreboardModel.sets[index][team == .team1 ? 0 : 1])")
-                    .frame(width: 60)
+                    .frame(width: geometry.size.width * 0.15)
             }
 
             Text(scoreboardModel.currentScoreString(for: team))
-                .frame(width: 60)
+                .frame(width: geometry.size.width * 0.15)
                 .foregroundColor(scoreboardModel.isPuntoDeOro ? .yellow : .primary)
                 .onTapGesture {
                     scoreboardModel.updateScore(team: team)
@@ -117,5 +118,6 @@ struct ScoreboardRowView: View {
 struct ScoreboardView_Previews: PreviewProvider {
     static var previews: some View {
         ScoreboardView(scoreboardModel: ScoreboardModel())
+            .previewInterfaceOrientation(.landscapeLeft)
     }
 }
