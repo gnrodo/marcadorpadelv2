@@ -13,6 +13,7 @@ struct PlayerView: View {
                 .font(.system(size: 20))
                 .padding(.leading, 10)
             Text(player.name)
+                .font(.title)
                 .onTapGesture {
                     isEditingName = true
                     newName = player.name

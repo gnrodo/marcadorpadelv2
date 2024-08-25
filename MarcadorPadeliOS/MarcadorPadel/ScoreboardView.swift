@@ -124,12 +124,12 @@ struct ScoreboardRowView: View {
             .frame(width: geometry.size.width * 0.6, alignment: .leading)
 
             ForEach(0..<3) { index in
-                VStack {
+                HStack(spacing: 0) {
+                    if index > 0 {
+                        Divider().frame(height: 50)
+                    }
                     Text("\(scoreboardModel.sets[index][team == .team1 ? 0 : 1])")
                         .frame(width: geometry.size.width * 0.1)
-                    if index < 2 {
-                        Divider()
-                    }
                 }
             }
 
