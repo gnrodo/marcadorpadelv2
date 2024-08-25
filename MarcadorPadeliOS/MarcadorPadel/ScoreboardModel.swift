@@ -38,6 +38,22 @@ class ScoreboardModel: ObservableObject {
         currentScores[0] == 3 && currentScores[1] == 3 && !isTiebreak
     }
     
+    var backgroundColor: Color {
+        isDarkMode ? Color(red: 0.11, green: 0.11, blue: 0.12) : Color.white
+    }
+    
+    var textColor: Color {
+        isDarkMode ? Color.white : Color.black
+    }
+    
+    var tableBackgroundColor: Color {
+        isDarkMode ? Color(red: 0.22, green: 0.22, blue: 0.23) : Color(red: 0.95, green: 0.95, blue: 0.97)
+    }
+    
+    var tableBorderColor: Color {
+        isDarkMode ? Color(red: 0.33, green: 0.33, blue: 0.35) : Color(red: 0.85, green: 0.85, blue: 0.87)
+    }
+    
     func updateScore(team: Team) {
         if isGameOver { return }
         
@@ -128,6 +144,7 @@ class ScoreboardModel: ObservableObject {
     
     func toggleDarkMode() {
         isDarkMode.toggle()
+        objectWillChange.send()
     }
     
     func changeFont() {
@@ -139,22 +156,6 @@ class ScoreboardModel: ObservableObject {
     
     func changeFontSize() {
         currentFontSize = currentFontSize == 16 ? 18 : 16
-    }
-    
-    func backgroundColor(for colorScheme: ColorScheme) -> Color {
-        colorScheme == .dark ? Color(red: 0.11, green: 0.11, blue: 0.12) : Color.white
-    }
-    
-    func textColor(for colorScheme: ColorScheme) -> Color {
-        colorScheme == .dark ? Color.white : Color.black
-    }
-    
-    func tableBackgroundColor(for colorScheme: ColorScheme) -> Color {
-        colorScheme == .dark ? Color(red: 0.22, green: 0.22, blue: 0.23) : Color(red: 0.95, green: 0.95, blue: 0.97)
-    }
-    
-    func tableBorderColor(for colorScheme: ColorScheme) -> Color {
-        colorScheme == .dark ? Color(red: 0.33, green: 0.33, blue: 0.35) : Color(red: 0.85, green: 0.85, blue: 0.87)
     }
 }
 
