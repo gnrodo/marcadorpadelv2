@@ -43,7 +43,7 @@ struct ScoreboardView: View {
                                     }
                                     .buttonStyle(RedButtonStyle())
                                     
-                                    Button("Cancelar") {
+                                    Button("Volver") {
                                         showingSettingsMenu = false
                                     }
                                     .buttonStyle(RedButtonStyle())
