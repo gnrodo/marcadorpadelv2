@@ -95,11 +95,11 @@
                     <td class="players-column">
                         <div class="player">
                             <span class="flag-icon flag-icon-es" data-team="1" data-player="1"></span>
-                            <span class="player-name" contenteditable="true" data-team="1" data-player="1">Jugador 1</span>
+                            <span class="player-name" data-team="1" data-player="1">Jugador 1</span>
                         </div>
                         <div class="player">
                             <span class="flag-icon flag-icon-es" data-team="1" data-player="2"></span>
-                            <span class="player-name" contenteditable="true" data-team="1" data-player="2">Jugador 2</span>
+                            <span class="player-name" data-team="1" data-player="2">Jugador 2</span>
                         </div>
                     </td>
                     <td class="set1">0</td>
@@ -111,11 +111,11 @@
                     <td class="players-column">
                         <div class="player">
                             <span class="flag-icon flag-icon-es" data-team="2" data-player="1"></span>
-                            <span class="player-name" contenteditable="true" data-team="2" data-player="1">Jugador 3</span>
+                            <span class="player-name" data-team="2" data-player="1">Jugador 3</span>
                         </div>
                         <div class="player">
                             <span class="flag-icon flag-icon-es" data-team="2" data-player="2"></span>
-                            <span class="player-name" contenteditable="true" data-team="2" data-player="2">Jugador 4</span>
+                            <span class="player-name" data-team="2" data-player="2">Jugador 4</span>
                         </div>
                     </td>
                     <td class="set1">0</td>
@@ -221,8 +221,12 @@
             if (setsWon === 2) {
                 // Game over, team wins
                 isGameOver = true;
-                console.log(`¡El Equipo ${team + 1} gana el partido!`);
-                showPopup(`¡El Equipo ${team + 1} gana el partido!`);
+                const winnerNames = [
+                    document.querySelector(`.team${team + 1} .player-name[data-player="1"]`).textContent,
+                    document.querySelector(`.team${team + 1} .player-name[data-player="2"]`).textContent
+                ];
+                console.log(`¡${winnerNames[0]} y ${winnerNames[1]} ganan el partido!`);
+                showPopup(`¡${winnerNames[0]} y ${winnerNames[1]} ganan el partido!`);
                 disableScoreClicks();
             } else {
                 currentSet++;
@@ -316,6 +320,7 @@
 
             popupMessage.textContent = message;
             popupInput.placeholder = inputPlaceholder;
+            popupInput.value = '';
             popupInput.style.display = inputPlaceholder ? 'block' : 'none';
             popup.style.display = 'block';
 
@@ -353,26 +358,15 @@
         });
 
         playerNames.forEach(name => {
-            let originalName = name.textContent;
-
             name.addEventListener('click', () => {
-                name.textContent = '';
-                name.focus();
-            });
-
-            name.addEventListener('blur', () => {
-                if (name.textContent.trim() === '') {
-                    name.textContent = originalName;
-                } else {
-                    originalName = name.textContent;
-                }
-            });
-
-            name.addEventListener('keydown', (event) => {
-                if (event.key === 'Enter') {
-                    event.preventDefault();
-                    name.blur();
-                }
+                const team = name.getAttribute('data-team');
+                const player = name.getAttribute('data-player');
+                const currentName = name.textContent;
+                showPopup('Ingrese el nuevo nombre del jugador:', currentName, (newName) => {
+                    if (newName !== null && newName.trim() !== '') {
+                        name.textContent = newName.trim();
+                    }
+                });
             });
         });
 
